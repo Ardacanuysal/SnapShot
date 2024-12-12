@@ -8,7 +8,7 @@
         /* Genel Stil */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f7f7f7;
+            background-color: #000;
             margin: 0;
             padding: 0;
             display: flex;
@@ -60,7 +60,7 @@
         }
 
         button:hover {
-            background-color: #45a049;
+            background-color: #388e3c;
         }
 
         button:active {
@@ -73,6 +73,16 @@
             margin: 10px;
         }
 
+        /* Kontrast Zıtlık Seviyesi Kaydırıcısı */
+        .contrast-container {
+            margin: 20px;
+            text-align: center;
+        }
+
+        .contrast-container input {
+            width: 80%;
+        }
+
         /* Footer */
         footer {
             position: absolute;
@@ -81,6 +91,16 @@
             font-size: 14px;
             text-align: center;
         }
+
+        /* Görsel Ekleme */
+        .image-overlay {
+            position: absolute;
+            top: 10%;
+            left: 20%;
+            width: 60%;
+            height: auto;
+            z-index: 10;
+        }
     </style>
 </head>
 <body>
@@ -88,21 +108,41 @@
 
     <div id="camera-container">
         <img id="camera" src="{{ url_for('video_feed') }}" alt="Kamera Görüntüsü">
+        <img id="overlay-image" class="image-overlay" style="display: none;" src="" alt="Overlay Image">
     </div>
 
     <div class="buttons-container">
-        <button onclick="selectImage('emoji')">Emoji Ekle</button>
-        <button onclick="selectImage('glasses')">Gözlük Ekle</button>
-        <button onclick="selectImage('heart')">Kalp Ekle</button>
-        <button onclick="selectImage('heart')">Demo</button>
+        <button onclick="selectImage('emoji')">COOL</button>
+        <button onclick="selectImage('glasses')">SUNGLASSES</button>
+        <button onclick="selectImage('heart')">LOVE</button>
+        <button onclick="selectImage('dog')">DOG</button>
+    </div>
+
+    <!-- Kontrast Zıtlık Seviyesi Kaydırıcısı -->
+    <div class="contrast-container">
+        <h3 style="color: aliceblue">Kontrast Zıtlık Seviyesi</h3>
+        <input style="color: #4CAF50" type="range" min="0" max="100" value="50" id="contrast-slider">
+        <span id="contrast-value">50</span>
     </div>
 
     <footer>
-        <p>Yüz Efekti Uygulaması - 2024</p>
+        <p>SNAPSHOT - 2024</p>
     </footer>
 
     <script>
+        // Efekt seçme fonksiyonu
         function selectImage(image) {
+            const overlayImage = document.getElementById("overlay-image");
+
+            // Dog görseli eklendiğinde yüzün tamamına uygulanacak şekilde düzenle
+            if (image === 'dog') {
+                overlayImage.src = 'dog-image.png'; // 'dog-image.png' görselinin yolunu belirtin
+                overlayImage.style.display = 'block'; // Görseli göster
+            } else {
+                overlayImage.style.display = 'none'; // Diğer görselleri gizle
+            }
+
+            // Diğer efektler (emoji, sunglasses, heart) için benzer mantık
             fetch('/select_image', {
                 method: 'POST',
                 body: new URLSearchParams({
@@ -110,6 +150,23 @@
                 })
             });
         }
+
+        // Kontrast zıtlık kaydırıcısı
+        const contrastSlider = document.getElementById("contrast-slider");
+        const contrastValue = document.getElementById("contrast-value");
+
+        contrastSlider.addEventListener("input", function() {
+            contrastValue.textContent = contrastSlider.value;
+
+            // Kontrast seviyesini sunucuya gönder
+            fetch('/set_contrast', {
+                method: 'POST',
+                body: JSON.stringify({contrast: contrastSlider.value}),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        });
     </script>
 </body>
 </html>
