@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNAPSHOT</title>
+    <style>
+        /* Genel Stil */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        /* Kamera Görüntüsü */
+        #camera-container {
+            text-align: center;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        #camera {
+            width: 80%;
+            height: auto;
+            border: 5px solid #4CAF50;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Butonlar */
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 25px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:active {
+            background-color: #388e3c;
+        }
+
+        /* Butonlar Arasındaki Boşluk */
+        .buttons-container button {
+            width: 150px;
+            margin: 10px;
+        }
+
+        /* Footer */
+        footer {
+            position: absolute;
+            bottom: 20px;
+            color: #888;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>SNAPSHOT</h1>
+
+    <div id="camera-container">
+        <img id="camera" src="{{ url_for('video_feed') }}" alt="Kamera Görüntüsü">
+    </div>
+
+    <div class="buttons-container">
+        <button onclick="selectImage('emoji')">Emoji Ekle</button>
+        <button onclick="selectImage('glasses')">Gözlük Ekle</button>
+        <button onclick="selectImage('heart')">Kalp Ekle</button>
+        <button onclick="selectImage('heart')">Demo</button>
+    </div>
+
+    <footer>
+        <p>Yüz Efekti Uygulaması - 2024</p>
+    </footer>
+
+    <script>
+        function selectImage(image) {
+            fetch('/select_image', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'image': image
+                })
+            });
+        }
+    </script>
+</body>
+</html>

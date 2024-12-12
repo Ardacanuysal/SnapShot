@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yüz Efekt Uygulaması</title>
+    <style>
+        #camera-container {
+            text-align: center;
+            position: relative;
+        }
+
+        #camera {
+            width: 80%;
+            height: auto;
+        }
+
+        .buttons-container {
+            margin-top: 10px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="camera-container">
+        <img id="camera" src="{{ url_for('video_feed') }}" alt="Kamera Görüntüsü">
+    </div>
+
+    <div class="buttons-container">
+        <button onclick="selectImage('emoji')">Emoji</button>
+        <button onclick="selectImage('glasses')">Gözlük</button>
+        <button onclick="selectImage('heart')">Kalp</button>
+    </div>
+
+    <script>
+        function selectImage(image) {
+            fetch('/select_image', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'image': image
+                })
+            });
+        }
+    </script>
+</body>
+</html>
