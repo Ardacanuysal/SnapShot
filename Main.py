@@ -12,11 +12,12 @@ eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml
 heart = cv2.imread('heart.png', cv2.IMREAD_UNCHANGED)
 glasses = cv2.imread('glasses.png', cv2.IMREAD_UNCHANGED)
 emoji = cv2.imread('emoji.png', cv2.IMREAD_UNCHANGED)
-dog = cv2.imread('dog.png', cv2.IMREAD_UNCHANGED)  # Dog görseli
+dog = cv2.imread('dog.png', cv2.IMREAD_UNCHANGED)
+yellow = cv2.imread('yellow.png', cv2.IMREAD_UNCHANGED)
 
 # Varsayılan simge
 current_image = None
-dog_encoding = False  # Dog encode'in aktif olup olmadığını kontrol etmek için
+dog_encoding = False
 
 def load_image(image_name):
     global current_image
@@ -26,7 +27,9 @@ def load_image(image_name):
         current_image = glasses
     elif image_name == 'emoji':
         current_image = emoji
-    elif image_name == 'dog':  # Dog görselini seçmek için
+    elif image_name == 'yellow':
+        current_image = yellow
+    elif image_name == 'Puppy':
         current_image = dog
     else:
         current_image = None
@@ -48,7 +51,7 @@ def overlay_image(frame, overlay, x, y, w, h):
         frame[y:y + overlay_resized.shape[0], x:x + overlay_resized.shape[1]] = overlay_resized
 
 def generate_frames():
-    global temperature_level, bw_level, current_image, contrast_level, dog_encoding
+    global temperature_level, bw_level, current_image, contrast_level
     cap = cv2.VideoCapture(0)  # Kamerayı açıyoruz
     if not cap.isOpened():
         print("Kamera açılamadı!")
@@ -87,7 +90,7 @@ def generate_frames():
 
                 if current_image is not None:
                     if current_image is glasses:
-                        glasses_width = int(w * 0.8)
+                        glasses_width = int(w * 0.75)
                         glasses_height = int(current_image.shape[0] * (glasses_width / current_image.shape[1]))
                         glasses_resized = cv2.resize(current_image, (glasses_width, glasses_height))
                         glasses_x = x + (w - glasses_width) // 2
